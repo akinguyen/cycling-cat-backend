@@ -25,7 +25,7 @@ app.use((req, res, next) => {
 });
 
 app.get("/", function (_, res) {
-  return res.status(200).json({ msg: "Success" });
+  return res.status(200).json({ msg: "YES" });
 });
 
 /*
