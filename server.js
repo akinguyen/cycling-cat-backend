@@ -28,6 +28,12 @@ app.get("/", function (_, res) {
   return res.status(200).json({ msg: "Success" });
 });
 
+app.get("/events", function (_, res) {
+  return res.status(200).json({
+    events: [{ name: "Sup" }, { name: "Hello" }, { name: "Bla Bla" }],
+  });
+});
+
 /*
 mongoose
   .connect(db)
