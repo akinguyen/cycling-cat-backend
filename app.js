@@ -1,11 +1,15 @@
 const express = require("express");
 const app = express();
-const { MongoClient } = require("mongodb");
-const url =
-  "mongodb+srv://cat:cat@cluster0.nup90.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
-const client = new MongoClient(url);
 const bodyParse = require("body-parser");
 const morgan = require("morgan");
+
+const mongoose = require("mongoose");
+mongoose
+  .connect(
+    "mongodb+srv://cat:cat@cluster0.nup90.mongodb.net/myFirstDatabase?retryWrites=true&w=majority"
+  )
+  .then((result) => console.log("Connected to MongoDb"))
+  .catch((err) => console.log(err));
 
 const eventRouter = require("./api/routes/events");
 
@@ -33,10 +37,5 @@ app.get("/", function (_, res) {
 });
 
 app.use("/events", eventRouter);
-
-client
-  .connect()
-  .then(() => console.log("Connected to MongoDB"))
-  .catch((err) => console.log(err));
 
 module.exports = app;
