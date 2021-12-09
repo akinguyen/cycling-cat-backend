@@ -5,6 +5,19 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
 
+router.get("/", (req, res, next) => {
+  User.find()
+    .exec()
+    .then((docs) => {
+      console.log(docs);
+      res.status(200).json(docs);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({ error: err });
+    });
+});
+
 router.post("/signup", (req, res, next) => {
   User.find({ email: req.body.email })
     .exec()
@@ -42,6 +55,20 @@ router.post("/signup", (req, res, next) => {
       }
     })
     .catch();
+});
+
+router.get("/:userId", (req, res, next) => {
+  const _id = req.params.userId;
+  User.findById(_id)
+    .exec()
+    .then((doc) => {
+      console.log(doc);
+      res.status(200).json(doc);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({ error: err });
+    });
 });
 
 router.post("/login", (req, res, next) => {
