@@ -11,7 +11,7 @@ mongoose
   .then((result) => console.log("Connected to MongoDb"))
   .catch((err) => console.log(err));
 
-const eventRouter = require("./api/routes/events");
+const userRouter = require("./api/routes/user");
 
 //MiddleWare
 app.use(bodyParse.urlencoded({ extended: false }));
@@ -36,6 +36,9 @@ app.get("/", function (_, res) {
   return res.status(200).json({ msg: "YES" });
 });
 
-app.use("/events", eventRouter);
+app.use("/user", userRouter);
 
+app.listen(5000, () => {
+  console.log("Example app listening at http://localhost:5000");
+});
 module.exports = app;
