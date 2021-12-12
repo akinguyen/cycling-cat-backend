@@ -100,7 +100,7 @@ router.post("/login", (req, res, next) => {
               email: user[0].email,
               userId: user[0]._id,
             },
-            process.env.JWT_KEY,
+            "12345678@@@@@@",
             {
               expiresIn: "1h",
             }
@@ -108,7 +108,6 @@ router.post("/login", (req, res, next) => {
           return res.status(200).json({
             message: "Login successfully",
             token: token,
-            userData: user[0],
           });
         }
         res.status(401).json({
