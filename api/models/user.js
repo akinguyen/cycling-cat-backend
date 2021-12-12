@@ -13,7 +13,7 @@ const userSchema = mongoose.Schema({
   info: {
     name: String,
     school: String,
-    stuID: Number,
+    stuID: String,
     birthday: String,
   },
 });
