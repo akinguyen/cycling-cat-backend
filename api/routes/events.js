@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const router = express.Router();
 
+const checkAuth = require("../middleware/checkAuth");
 const Event = require("../models/events");
 
 router.get("/", (req, res, next) => {
@@ -17,26 +18,30 @@ router.get("/", (req, res, next) => {
     });
 });
 
-router.post("/", (req, res, next) => {
+router.post("/", checkAuth, (req, res, next) => {
   const event = new Event({
     _id: new mongoose.Types.ObjectId(),
     description: req.body.description,
-    sport: req.body.sport,
+    category: req.body.category,
     location: req.body.location,
     time: req.body.time,
+    creatorID: req.userData.userId,
+    participants: req.body.participants,
   });
   event
     .save()
-    .then((result) => console.log(result))
+    .then((result) => {
+      console.log(result);
+      res.status(201).json({
+        msg: "handling POST req to /events",
+        event: event,
+      });
+    })
     .catch((err) => console.log(err));
-  res.status(201).json({
-    msg: "handling POST req to /events",
-    event: event,
-  });
 });
 
-router.get("/:eventID", (req, res, next) => {
-  const id = req.params.eventID;
+router.get("/:ID", (req, res, next) => {
+  const id = req.params.ID;
   Event.findById(id)
     .exec()
     .then((doc) => {
@@ -49,13 +54,13 @@ router.get("/:eventID", (req, res, next) => {
     });
 });
 
-router.patch("/:eventID", (req, res, next) => {
+router.patch("/:eventID", checkAuth, (req, res, next) => {
   const id = req.params.eventID;
   Event.updateOne(
     { _id: id },
     {
       description: req.body.newDescription,
-      sport: req.body.newSport,
+      category: req.body.newCategory,
       location: req.body.newLocation,
       time: req.body.newTime,
     }

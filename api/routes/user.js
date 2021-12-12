@@ -4,6 +4,7 @@ const router = express.Router();
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
+const Event = require("../models/events");
 
 router.get("/", (req, res, next) => {
   User.find()
@@ -37,6 +38,12 @@ router.post("/signup", (req, res, next) => {
               _id: new mongoose.Types.ObjectId(),
               email: req.body.email,
               password: hash,
+              info: {
+                name: req.body.info.name,
+                school: req.body.info.school,
+                stuID: req.body.info.stuID,
+                birthday: req.body.info.birthday,
+              },
             });
             user
               .save()
@@ -78,6 +85,7 @@ router.post("/login", (req, res, next) => {
       if (user.length < 1) {
         return res.status(401).json({
           message: "Incorrect email",
+          token: null,
         });
       }
       bcrypt.compare(req.body.password, user[0].password, (err, result) => {
@@ -100,10 +108,12 @@ router.post("/login", (req, res, next) => {
           return res.status(200).json({
             message: "Login successfully",
             token: token,
+            userData: user[0],
           });
         }
         res.status(401).json({
           message: "Login failed",
+          token: null,
         });
       });
     })

@@ -13,6 +13,7 @@ mongoose
 
 const userRouter = require("./api/routes/user");
 const eventRouter = require("./api/routes/events");
+const myeventRouter = require("./api/routes/myevents");
 
 //MiddleWare
 app.use(bodyParse.urlencoded({ extended: false }));
@@ -39,8 +40,6 @@ app.get("/", function (_, res) {
 
 app.use("/user", userRouter);
 app.use("/events", eventRouter);
+app.use("/myevents", myeventRouter);
 
-app.listen(5000, () => {
-  console.log("Example app listening at http://localhost:5000");
-});
 module.exports = app;
