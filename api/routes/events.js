@@ -25,7 +25,7 @@ router.post("/", (req, res, next) => {
     category: req.body.category,
     location: req.body.location,
     time: req.body.time,
-    creatorID: req.body.userId,
+    creatorID: req.body.creatorID,
     participants: req.body.participants,
   });
   event
