@@ -18,14 +18,14 @@ router.get("/", (req, res, next) => {
     });
 });
 
-router.post("/", checkAuth, (req, res, next) => {
+router.post("/", (req, res, next) => {
   const event = new Event({
     _id: new mongoose.Types.ObjectId(),
     description: req.body.description,
     category: req.body.category,
     location: req.body.location,
     time: req.body.time,
-    creatorID: req.userData.userId,
+    creatorID: req.body.userId,
     participants: req.body.participants,
   });
   event
