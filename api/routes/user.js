@@ -24,7 +24,7 @@ router.post("/signup", (req, res, next) => {
     .exec()
     .then((user) => {
       if (user.length >= 1) {
-        return res.status(409).json({
+        return res.status(200).json({
           message: "Mail exists",
         });
       } else {
