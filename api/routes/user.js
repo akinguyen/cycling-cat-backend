@@ -123,6 +123,41 @@ router.post("/login", (req, res, next) => {
     });
 });
 
+router.patch("/:userId", (req, res, next) => {
+  User.updateOne(
+    { _id: req.params.userId },
+    {
+      info: {
+        name: req.body.newInfo.newName,
+        school: req.body.newInfo.newSchool,
+        stuID: req.body.newInfo.newStuID,
+        birthday: req.body.newInfo.newBirthday,
+      },
+    }
+  )
+    .exec()
+    .then((result) => {
+      User.findOne({ _id: req.params.userId })
+        .then((user) => {
+          console.log({
+            result: result,
+            user: user,
+          });
+          res.status(200).json({
+            result: result,
+            user: user,
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+          res.status(500).json({ error: err });
+        });
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({ error: err });
+    });
+});
 router.delete("/:userId", (req, res, next) => {
   User.remove({ _id: req.params.userId })
     .exec()

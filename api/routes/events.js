@@ -54,7 +54,7 @@ router.get("/:ID", (req, res, next) => {
     });
 });
 
-router.patch("/:eventID", checkAuth, (req, res, next) => {
+router.patch("/:eventID", (req, res, next) => {
   const id = req.params.eventID;
   Event.updateOne(
     { _id: id },
