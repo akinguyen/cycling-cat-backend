@@ -8,7 +8,7 @@ const eventSchema = mongoose.Schema({
   category: String,
   time: String,
   creatorID: String,
-  participants: [{ name: String, _id: String }],
+  participants: { type: Array },
 });
 
 module.exports = mongoose.model("Event", eventSchema);
