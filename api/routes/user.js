@@ -4,6 +4,7 @@ const router = express.Router();
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 const User = require("../models/user");
+const Event = require("../models/events");
 
 router.get("/", (req, res, next) => {
   User.find()
@@ -23,7 +24,7 @@ router.post("/signup", (req, res, next) => {
     .exec()
     .then((user) => {
       if (user.length >= 1) {
-        return res.status(409).json({
+        return res.status(200).json({
           message: "Mail exists",
         });
       } else {
@@ -37,6 +38,12 @@ router.post("/signup", (req, res, next) => {
               _id: new mongoose.Types.ObjectId(),
               email: req.body.email,
               password: hash,
+              info: {
+                name: "",
+                school: "",
+                stuID: "",
+                birthday: "",
+              },
             });
             user
               .save()
@@ -78,6 +85,7 @@ router.post("/login", (req, res, next) => {
       if (user.length < 1) {
         return res.status(401).json({
           message: "Incorrect email",
+          token: null,
         });
       }
       bcrypt.compare(req.body.password, user[0].password, (err, result) => {
@@ -92,7 +100,7 @@ router.post("/login", (req, res, next) => {
               email: user[0].email,
               userId: user[0]._id,
             },
-            process.env.JWT_KEY,
+            "12345678@@@@@@",
             {
               expiresIn: "1h",
             }
@@ -100,10 +108,12 @@ router.post("/login", (req, res, next) => {
           return res.status(200).json({
             message: "Login successfully",
             token: token,
+            userData: user[0],
           });
         }
         res.status(401).json({
           message: "Login failed",
+          token: null,
         });
       });
     })
@@ -113,6 +123,41 @@ router.post("/login", (req, res, next) => {
     });
 });
 
+router.patch("/:userId", (req, res, next) => {
+  User.updateOne(
+    { _id: req.params.userId },
+    {
+      info: {
+        name: req.body.newInfo.newName,
+        school: req.body.newInfo.newSchool,
+        stuID: req.body.newInfo.newStuID,
+        birthday: req.body.newInfo.newBirthday,
+      },
+    }
+  )
+    .exec()
+    .then((result) => {
+      User.findOne({ _id: req.params.userId })
+        .then((user) => {
+          console.log({
+            result: result,
+            user: user,
+          });
+          res.status(200).json({
+            result: result,
+            user: user,
+          });
+        })
+        .catch((err) => {
+          console.log(err);
+          res.status(500).json({ error: err });
+        });
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({ error: err });
+    });
+});
 router.delete("/:userId", (req, res, next) => {
   User.remove({ _id: req.params.userId })
     .exec()

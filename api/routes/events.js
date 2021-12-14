@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const router = express.Router();
 
+const checkAuth = require("../middleware/checkAuth");
 const Event = require("../models/events");
 
 router.get("/", (req, res, next) => {
@@ -21,22 +22,26 @@ router.post("/", (req, res, next) => {
   const event = new Event({
     _id: new mongoose.Types.ObjectId(),
     description: req.body.description,
-    sport: req.body.sport,
+    category: req.body.category,
     location: req.body.location,
     time: req.body.time,
+    creatorID: req.body.creatorID,
+    participants: req.body.participants,
   });
   event
     .save()
-    .then((result) => console.log(result))
+    .then((result) => {
+      console.log(result);
+      res.status(201).json({
+        msg: "handling POST req to /events",
+        event: event,
+      });
+    })
     .catch((err) => console.log(err));
-  res.status(201).json({
-    msg: "handling POST req to /events",
-    event: event,
-  });
 });
 
-router.get("/:eventID", (req, res, next) => {
-  const id = req.params.eventID;
+router.get("/:ID", (req, res, next) => {
+  const id = req.params.ID;
   Event.findById(id)
     .exec()
     .then((doc) => {
@@ -55,9 +60,10 @@ router.patch("/:eventID", (req, res, next) => {
     { _id: id },
     {
       description: req.body.newDescription,
-      sport: req.body.newSport,
+      category: req.body.newCategory,
       location: req.body.newLocation,
       time: req.body.newTime,
+      participants: req.body.newParticipants,
     }
   )
     .exec()
@@ -84,4 +90,33 @@ router.delete("/:eventID", (req, res, next) => {
       res.status(500).json({ error: err });
     });
 });
+
+/**
+ * lúc POST, gửi userId vs eventId
+ */
+/*
+router.post("/join", (req, res, next) => {
+  const userId = req.body.userId;
+  const eventId = req.body.eventId; //2
+  User.findById(userId)
+    .exec()
+    .then((doc) => {
+      // doc = userData = {id, info, events: [9,8,7]}
+      let newEvents = doc.events.push(eventId); // [2]
+
+      User.findByIdAndUpdate(userId, {
+        events: newEvents,
+        info: { name: "Hello", school: "New school" },
+        password: "Sup",
+      });
+
+      res.status(200).json(doc);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({ error: err });
+    });
+});
+*/
+
 module.exports = router;
