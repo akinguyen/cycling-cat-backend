@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const router = express.Router();
+const User = require("../models/user");
 
 const checkAuth = require("../middleware/checkAuth");
 const Event = require("../models/events");
@@ -91,25 +92,20 @@ router.delete("/:eventID", (req, res, next) => {
     });
 });
 
-/**
- * lúc POST, gửi userId vs eventId
- */
-/*
 router.post("/join", (req, res, next) => {
   const userId = req.body.userId;
   const eventId = req.body.eventId; //2
-  User.findById(userId)
+
+  User.findByIdAndUpdate(
+    userId,
+    {
+      $push: { events: eventId },
+    },
+    { new: true }
+  )
     .exec()
     .then((doc) => {
-      // doc = userData = {id, info, events: [9,8,7]}
-      let newEvents = doc.events.push(eventId); // [2]
-
-      User.findByIdAndUpdate(userId, {
-        events: newEvents,
-        info: { name: "Hello", school: "New school" },
-        password: "Sup",
-      });
-
+      console.log(doc);
       res.status(200).json(doc);
     })
     .catch((err) => {
@@ -117,6 +113,5 @@ router.post("/join", (req, res, next) => {
       res.status(500).json({ error: err });
     });
 });
-*/
 
 module.exports = router;
