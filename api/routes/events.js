@@ -63,6 +63,7 @@ router.patch("/:eventID", (req, res, next) => {
       category: req.body.newCategory,
       location: req.body.newLocation,
       time: req.body.newTime,
+      participants: req.body.newParticipants,
     }
   )
     .exec()
