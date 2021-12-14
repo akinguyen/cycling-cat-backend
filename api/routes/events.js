@@ -18,14 +18,14 @@ router.get("/", (req, res, next) => {
     });
 });
 
-router.post("/", checkAuth, (req, res, next) => {
+router.post("/", (req, res, next) => {
   const event = new Event({
     _id: new mongoose.Types.ObjectId(),
     description: req.body.description,
     category: req.body.category,
     location: req.body.location,
     time: req.body.time,
-    creatorID: req.userData.userId,
+    creatorID: req.body.creatorID,
     participants: req.body.participants,
   });
   event
@@ -54,7 +54,7 @@ router.get("/:ID", (req, res, next) => {
     });
 });
 
-router.patch("/:eventID", checkAuth, (req, res, next) => {
+router.patch("/:eventID", (req, res, next) => {
   const id = req.params.eventID;
   Event.updateOne(
     { _id: id },
@@ -63,6 +63,7 @@ router.patch("/:eventID", checkAuth, (req, res, next) => {
       category: req.body.newCategory,
       location: req.body.newLocation,
       time: req.body.newTime,
+      participants: req.body.newParticipants,
     }
   )
     .exec()

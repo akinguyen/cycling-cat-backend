@@ -7,7 +7,7 @@ const User = require("../models/user");
 const Event = require("../models/events");
 
 router.get("/:userId", (req, res, next) => {
-  Event.find({ creatorId: req.params.userId })
+  Event.find({ creatorID: req.params.userId })
     .exec()
     .then((docs) => {
       console.log(docs);
