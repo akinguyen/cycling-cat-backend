@@ -16,6 +16,7 @@ const userSchema = mongoose.Schema({
     stuID: Number,
     birthday: String,
   },
+  events: { type: Array },
 });
 
 module.exports = mongoose.model("User", userSchema);

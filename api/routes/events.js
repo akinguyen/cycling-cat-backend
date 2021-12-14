@@ -89,4 +89,33 @@ router.delete("/:eventID", (req, res, next) => {
       res.status(500).json({ error: err });
     });
 });
+
+/**
+ * lúc POST, gửi userId vs eventId
+ */
+/*
+router.post("/join", (req, res, next) => {
+  const userId = req.body.userId;
+  const eventId = req.body.eventId; //2
+  User.findById(userId)
+    .exec()
+    .then((doc) => {
+      // doc = userData = {id, info, events: [9,8,7]}
+      let newEvents = doc.events.push(eventId); // [2]
+
+      User.findByIdAndUpdate(userId, {
+        events: newEvents,
+        info: { name: "Hello", school: "New school" },
+        password: "Sup",
+      });
+
+      res.status(200).json(doc);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({ error: err });
+    });
+});
+*/
+
 module.exports = router;
