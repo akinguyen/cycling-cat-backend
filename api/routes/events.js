@@ -104,6 +104,7 @@ router.post("/join", (req, res, next) => {
     { new: true }
   )
     .exec()
+    .save()
     .then((doc) => {
       console.log(doc);
       res.status(200).json(doc);
