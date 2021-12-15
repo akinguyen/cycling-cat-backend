@@ -127,6 +127,7 @@ router.patch("/:userId", (req, res, next) => {
   User.updateOne(
     { _id: req.params.userId },
     {
+      events: req.body.newEventts,
       info: {
         name: req.body.newInfo.newName,
         school: req.body.newInfo.newSchool,
