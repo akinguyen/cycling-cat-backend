@@ -158,6 +158,7 @@ router.patch("/:userId", (req, res, next) => {
       res.status(500).json({ error: err });
     });
 });
+
 router.delete("/:userId", (req, res, next) => {
   User.remove({ _id: req.params.userId })
     .exec()

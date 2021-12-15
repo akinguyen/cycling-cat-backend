@@ -95,7 +95,7 @@ router.delete("/:eventID", (req, res, next) => {
 router.post("/join", (req, res, next) => {
   const userId = req.body.userId;
   const eventId = req.body.eventId; //2
-
+  console.log(req.body);
   User.findByIdAndUpdate(
     userId,
     {
